@@ -10,7 +10,7 @@ interface TaskListProps {
 
 const TaskList: React.FC<TaskListProps> = ({ tasks, onToggle, onDelete }) => {
   return (
-    <ul style={{listStyle:'none', padding:0}}>
+    <ul className='list'>
       {tasks.map((task) => (
         <TaskItem key={task.id} task={task} onToggle={onToggle} onDelete={onDelete} />
       ))}

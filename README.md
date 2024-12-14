@@ -17,3 +17,9 @@
 ```shell
     npm run preview
 ```
+
+Деплой:
+
+```shell
+    npm run deploy
+```

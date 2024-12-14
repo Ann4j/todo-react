@@ -5,7 +5,9 @@ import TaskList from './components/TaskList';
 const App: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [filter,setFilter] = useState<'all' | 'completed' | 'active'>('all');
+  const [filter, setFilter] = useState<'all' | 'completed' | 'active'>('all');
+
+  const activeTaskCount = tasks.filter((task) => !task.completed).length;
 
   useEffect(() => {
     const storedTasks = localStorage.getItem('tasks');
@@ -51,31 +53,43 @@ const App: React.FC = () => {
   const filterTask = tasks.filter((task) => {
     if (filter === 'completed') return task.completed;
     if (filter === 'active') return !task.completed;
-    return true; // Для 'all'
+    return true;
   });
 
+  const deleteAllCompletedTask = () => {
+    setTasks((prev) => prev.filter((task) => task.completed === false));
+  };
+
   return (
-    <div>
+    <div className='wrap'>
       <h1>TODOS</h1>
-      <form onSubmit={handleSubmit}>
+      <form className='form' onSubmit={handleSubmit}>
         <input
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="New task"
-          style={{ flex: 1, marginRight: '8px', padding: '8px' }}
+          className='input'
         />
         <button type="submit" style={{ padding: '8px' }}>Add</button>
       </form>
       <TaskList tasks={filterTask} onToggle={toggleTask} onDelete={deleteTask} />
-      <div>
-        <button onClick={() => setFilter('all')} >
-          All
-        </button>
-        <button onClick={() => setFilter('active')} >
-          Active
-        </button>
-        <button onClick={() => setFilter('completed')} >
-          Completed
+      <div className='wrap-bottom'>
+        <div>
+          <span>{`${activeTaskCount} active tasks`}</span>
+        </div>
+        <div className='buttons'>
+          <button onClick={() => setFilter('all')} >
+            All
+          </button>
+          <button onClick={() => setFilter('active')} >
+            Active
+          </button>
+          <button onClick={() => setFilter('completed')} >
+            Completed
+          </button>
+        </div>
+        <button onClick={deleteAllCompletedTask}>
+          Clear completed
         </button>
       </div>
     </div>
